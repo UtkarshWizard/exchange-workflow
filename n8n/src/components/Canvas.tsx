@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback } from "react";
 import {
   addEdge,
   applyEdgeChanges,
@@ -10,79 +10,53 @@ import {
 } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
 import TimerNode from "./Nodes/Triggers/TimerNode";
-import { SideSheet } from "./Sidesheet";
+import { TriggerSheet } from "./TriggerSheet";
+import type { EdgeType, NodeType } from "@/types/types";
+import PriceTriggerNode from "./Nodes/Triggers/PriceTriggerNode";
 
 const nodeTypes = {
-  timerNode: TimerNode,
+  "price-trigger" : PriceTriggerNode,
+  "timer" : TimerNode
 };
-
-const initialNodes = [
-  {
-    id: "timerNode",
-    position: { x: 0, y: -100 },
-    type: "trigger",
-    data: { label: "30 sec" },
-  },
-];
-
-const initialEdges = [
-  { id: "n1-n2", source: "n1", target: "n2", label: "Hey There" },
-];
-
-export type NodeKind =
-  | "price-trigger"
-  | "time"
-  | "email"
-  | "ai_report"
-  | "whatsapp";
-
-export type NodeMetadata = {
-  label: string;
-};
-
-export interface NodeType {
-  id: string;
-  type: "trigger" | "action"; //is it a action or a trigger node ?
-  position: { x: number; y: number };
-  data: {
-    kind: NodeKind; // if trigger then timer or price ? if action toh ?
-    metaData: NodeMetadata;
-  };
-}
 
 export default function Canvas() {
   const [nodes, setNodes] = useState<NodeType[]>([]);
-  const [edges, setEdges] = useState(initialEdges);
-  const [isOpen, setIsOpen] = useState(true);
-
-  const isNodesPresent = nodes.length > 0;
-
-  useEffect(() => {
-    if (isNodesPresent) {
-      setIsOpen(false);
-    }
-  }, []);
+  const [edges, setEdges] = useState<EdgeType[]>([]);
 
   const onNodesChange = useCallback(
-    (changes) =>
+    (changes : any) =>
       setNodes((nodesSnapshot) => applyNodeChanges(changes, nodesSnapshot)),
     []
   );
 
   const onEdgeChange = useCallback(
-    (changes) =>
+    (changes : any) =>
       setEdges((edgesSnapshot) => applyEdgeChanges(changes, edgesSnapshot)),
     []
   );
 
   const onConnect = useCallback(
-    (params) => setEdges((edgesSnapshot) => addEdge(params, edgesSnapshot)),
+    (params : any) => setEdges((edgesSnapshot) => addEdge(params, edgesSnapshot)),
     []
   );
 
   return (
     <>
-      {isOpen && <SideSheet isOpen={isOpen} />}
+      { !nodes.length && <TriggerSheet onSelect={(type , metaData) => {
+        setNodes([...nodes , {
+          id: Math.random().toString(),
+          type,
+          data: {
+            kind : "trigger",
+            metaData,
+            label: type
+          },
+          position: {
+            x: 0,
+            y: 0
+          }
+        } ])
+      }} /> }
       <div style={{ width: "100w", height: "100vh" }}>
         <ReactFlow
           nodes={nodes}
