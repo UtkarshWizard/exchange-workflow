@@ -1,7 +1,6 @@
 import { Handle, Position } from "@xyflow/react";
 import type { NodeKind, NodeMetadata } from "../../Canvas";
 
-
 export default function TimerNode({data , isConnectable} : {
     data : {
         kind: NodeKind,
