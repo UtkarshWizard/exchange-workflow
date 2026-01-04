@@ -19,7 +19,6 @@ export type EdgeType = {
   id: string;
   source: string 
   target: string
-  label: string
 }
 
 export type TimerMetaData = {
@@ -29,4 +28,12 @@ export type TimerMetaData = {
 export type PriceMetaData = {
     asset : string;
     price : number
+}
+
+export type emailMetadata = {
+    email: string
+}
+
+export type numberMetadata = {
+    number: string
 }

@@ -18,30 +18,24 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import type { Node, NodeMetadata, PriceMetaData, TimerMetaData } from "@/types/types";
+import type { emailMetadata, Node, NodeMetadata, numberMetadata } from "@/types/types";
 import { useState } from "react";
 
-const SUPPORTED_TRIGGERS = [
+const SUPPORTED_ACTIONS = [
   {
-    id: "price-trigger",
-    title: "Price Trigger",
-    description: "Add a price trigger",
+    id: "email",
+    title: "Email Notification",
+    description: "Send a notification on Email",
   },
   {
-    id: "timer",
-    title: "Timer",
-    description: "Add a Timer to trigger workflow",
-  },
-];
-
-const SUPPORTED_ASSETS = [
-  {
-    id: "nifty50",
-    title: "Nifty 50",
+    id: "whatsapp",
+    title: "Whatsapp",
+    description: "Send a notification on Whatsapp",
   },
   {
-    id: "goldbees",
-    title: "GoldBees",
+    id: "report",
+    title: "Ai Report",
+    description: "Generate a Report",
   },
 ];
 
@@ -50,16 +44,12 @@ export function ActionSheet({
 }: {
   onSelect: (type: Node, metaData: NodeMetadata) => void;
 }) {
-  const [metaData, setMetaData] = useState<PriceMetaData | TimerMetaData>({
-    time: 60,
-    asset: "Nifty 50",
-    price: 20000
+  const [metaData, setMetaData] = useState<emailMetadata | numberMetadata>({
+    email: "example@gmail.com",
+    number: "9012345678"
   });
-  const [selectedTrigger, setSelectedTrigger] = useState(
-    SUPPORTED_TRIGGERS[0].id
-  );
-  const [selectedAsset, setSelectedAsset] = useState(
-    SUPPORTED_ASSETS[0].id
+  const [selectedAction, setSelectedAction] = useState(
+    SUPPORTED_ACTIONS[0].id
   );
 
   return (
@@ -74,8 +64,8 @@ export function ActionSheet({
         <div className="flex flex-col gap-4 px-4">
           <Label>Select Action Type</Label>
           <Select
-            value={selectedTrigger}
-            onValueChange={(value) => setSelectedTrigger(value)}
+            value={selectedAction}
+            onValueChange={(value) => setSelectedAction(value)}
           >
             <SelectTrigger className="w-45">
               <SelectValue placeholder="Select a Trigger" />
@@ -83,7 +73,7 @@ export function ActionSheet({
             <SelectContent>
               <SelectGroup>
                 <SelectLabel>Select Node Type</SelectLabel>
-                {SUPPORTED_TRIGGERS.map(({ id, title }) => (
+                {SUPPORTED_ACTIONS.map(({ id, title }) => (
                   <SelectItem key={id} value={id}>
                     {title}
                   </SelectItem>
@@ -92,54 +82,32 @@ export function ActionSheet({
             </SelectContent>
           </Select>
         </div>
-        {selectedTrigger === "price-trigger" ? (
+        {selectedAction === "email" && (
           <div className="flex flex-col w-full p-4 gap-4">
-            <Label>Select Asset</Label>
-            <Select
-              value={selectedAsset}
-              onValueChange={(value) => { 
-                setSelectedAsset(value);
-                setMetaData((metaData) => ({
-                  ...metaData,
-                  asset: SUPPORTED_ASSETS.find((a) => a.id === value)?.title ?? value
-                }))
-              }}
-            >
-              <SelectTrigger className="w-45">
-                <SelectValue placeholder="Select a Trigger" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectGroup>
-                  <SelectLabel>Select Asset</SelectLabel>
-                  {SUPPORTED_ASSETS.map(({ id, title }) => (
-                    <SelectItem key={id} value={id} >
-                      {title}
-                    </SelectItem>
-                  ))}
-                </SelectGroup>
-              </SelectContent>
-            </Select>
-
-            <Label>Set the Price</Label>
-            <Input placeholder="Set the price" onChange={(e) => setMetaData(metaData => ({
+            <Label>Enter the email</Label>
+            <Input placeholder="johndoe@gmail.com" onChange={(e) => { metaData => ({
               ...metaData,
-              price: Number(e.target.value)
-            }))} ></Input>
-
+              email: e.target.value
+            })}}></Input>
           </div>
-        ) : (
+        )}
+        { selectedAction === "whatsapp" && (
           <div className="flex flex-col gap-4 p-4">
-            <Label>Set the time</Label>
-            <Input placeholder="Set the time in seconds" type="number" min="0" onChange={(e) => setMetaData( metaData => ({
+            <Label>Enter your Whatsapp number</Label>
+            <Input placeholder="9012345678" onChange={(e) => setMetaData( metaData => ({
               ...metaData,
-              time: Number(e.target.value)
+              number: e.target.value
             }))}></Input>
+          </div>
+        )}
+        {selectedAction === "report" && (
+          <div className="flex flex-col gap-4 p-4">
           </div>
         )}
         <SheetFooter>
           <Button
             onClick={() => {
-              onSelect(selectedTrigger, metaData);
+              onSelect(selectedAction, metaData);
             }}
             type="submit"
           >

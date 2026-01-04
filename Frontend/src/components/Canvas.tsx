@@ -78,7 +78,28 @@ export default function Canvas() {
         } ])
       }} /> }
 
-      {selectAction && <ActionSheet  />}
+      {selectAction && <ActionSheet onSelect={(type , metaData) => {
+        const nodeId = Math.random().toString()
+        setNodes([
+          ...nodes, {
+            id: nodeId,
+            type,
+            data: {
+              kind: "action",
+              metaData,
+              label: type
+            },
+            position: selectAction.position
+          }
+        ]);
+        setEdges([
+          ...edges , {
+            id: Math.random().toString(),
+            source: selectAction.sourceNodeId,
+            target: nodeId
+          }
+        ])
+      }}  />}
       <div style={{ width: "100w", height: "100vh" }}>
         <ReactFlow
           nodes={nodes}
