@@ -8,9 +8,9 @@ export default function PriceTriggerNode({data , isConnectable} : {
     },
     isConnectable: boolean
 }) {
-    return <div>
-        Asset - <label typeof="html">{data.metaData.asset}</label>
-        Price - <label typeof="html">{data.metaData.price}</label>
+    return <div className="p-4 border-2">
+        Asset - <label typeof="html">{data.metaData.asset}</label> : 
+        Price - Rs <label typeof="html">{data.metaData.price}</label>
         <Handle type="source" position={Position.Right} />
     </div>
 }

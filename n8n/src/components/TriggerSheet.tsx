@@ -36,7 +36,7 @@ const SUPPORTED_TRIGGERS = [
 
 const SUPPORTED_ASSETS = [
   {
-    id: "nifty_50",
+    id: "nifty50",
     title: "Nifty 50",
   },
   {
@@ -51,7 +51,9 @@ export function TriggerSheet({
   onSelect: (type: Node, metaData: NodeMetadata) => void;
 }) {
   const [metaData, setMetaData] = useState<PriceMetaData | TimerMetaData>({
-    time: 60
+    time: 60,
+    asset: "Nifty 50",
+    price: 20000
   });
   const [selectedTrigger, setSelectedTrigger] = useState(
     SUPPORTED_TRIGGERS[0].id
@@ -95,7 +97,13 @@ export function TriggerSheet({
             <Label>Select Asset</Label>
             <Select
               value={selectedAsset}
-              onValueChange={(value) => setSelectedAsset(value)}
+              onValueChange={(value) => { 
+                setSelectedAsset(value);
+                setMetaData((metaData) => ({
+                  ...metaData,
+                  asset: SUPPORTED_ASSETS.find((a) => a.id === value)?.title ?? value
+                }))
+              }}
             >
               <SelectTrigger className="w-45">
                 <SelectValue placeholder="Select a Trigger" />
@@ -104,7 +112,7 @@ export function TriggerSheet({
                 <SelectGroup>
                   <SelectLabel>Select Asset</SelectLabel>
                   {SUPPORTED_ASSETS.map(({ id, title }) => (
-                    <SelectItem key={id} value={id}>
+                    <SelectItem key={id} value={id} >
                       {title}
                     </SelectItem>
                   ))}
@@ -113,7 +121,10 @@ export function TriggerSheet({
             </Select>
 
             <Label>Set the Price</Label>
-            <Input placeholder="Set the price"></Input>
+            <Input placeholder="Set the price" onChange={(e) => setMetaData(metaData => ({
+              ...metaData,
+              price: Number(e.target.value)
+            }))} ></Input>
 
           </div>
         ) : (
