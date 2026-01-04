@@ -2,7 +2,7 @@ export type Node =
   | "price-trigger"
   | "timer"
 
-export type NodeMetadata = any
+export type NodeMetadata = PriceMetaData | TimerMetaData
 
 export interface NodeType {
   id: string;

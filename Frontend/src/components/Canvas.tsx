@@ -13,6 +13,7 @@ import TimerNode from "./Nodes/Triggers/TimerNode";
 import { TriggerSheet } from "./TriggerSheet";
 import type { EdgeType, NodeType } from "@/types/types";
 import PriceTriggerNode from "./Nodes/Triggers/PriceTriggerNode";
+import { ActionSheet } from "./ActionSheet";
 
 const nodeTypes = {
   "price-trigger" : PriceTriggerNode,
@@ -22,6 +23,13 @@ const nodeTypes = {
 export default function Canvas() {
   const [nodes, setNodes] = useState<NodeType[]>([]);
   const [edges, setEdges] = useState<EdgeType[]>([]);
+  const [selectAction , setSelectAction] = useState<{
+    position : {
+      x: number,
+      y: number
+    },
+    sourceNodeId : string
+  } | null>(null)
 
   const onNodesChange = useCallback(
     (changes : any) =>
@@ -40,6 +48,18 @@ export default function Canvas() {
     []
   );
 
+  const onConnectEnd = useCallback(
+    (params , connectionInfo ) => {
+      if (!connectionInfo.isValid) {
+        setSelectAction({
+          sourceNodeId: connectionInfo.fromNode.id,
+          position: connectionInfo.to
+        })
+      }
+    },
+    []
+  )
+
   return (
     <>
       { !nodes.length && <TriggerSheet onSelect={(type , metaData) => {
@@ -57,6 +77,8 @@ export default function Canvas() {
           }
         } ])
       }} /> }
+
+      {selectAction && <ActionSheet  />}
       <div style={{ width: "100w", height: "100vh" }}>
         <ReactFlow
           nodes={nodes}
@@ -65,6 +87,7 @@ export default function Canvas() {
           onNodesChange={onNodesChange}
           onEdgesChange={onEdgeChange}
           onConnect={onConnect}
+          onConnectEnd={onConnectEnd}
           fitView
         >
           <Background />
