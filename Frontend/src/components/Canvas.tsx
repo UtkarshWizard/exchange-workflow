@@ -14,10 +14,16 @@ import { TriggerSheet } from "./TriggerSheet";
 import type { EdgeType, NodeType } from "@/types/types";
 import PriceTriggerNode from "./Nodes/Triggers/PriceTriggerNode";
 import { ActionSheet } from "./ActionSheet";
+import EmailNotificationNode from "./Nodes/Actions/EmailActionNode";
+import WhatsappNotificationNode from "./Nodes/Actions/WhatsappNode";
+import ReportsNode from "./Nodes/Actions/Reports";
 
 const nodeTypes = {
   "price-trigger" : PriceTriggerNode,
-  "timer" : TimerNode
+  "timer" : TimerNode,
+  "email" : EmailNotificationNode,
+  "whatsapp" : WhatsappNotificationNode,
+  "report" : ReportsNode
 };
 
 export default function Canvas() {
@@ -89,7 +95,10 @@ export default function Canvas() {
               metaData,
               label: type
             },
-            position: selectAction.position
+            position: {
+              x: 150,
+              y: 0
+            }
           }
         ]);
         setEdges([
@@ -98,7 +107,8 @@ export default function Canvas() {
             source: selectAction.sourceNodeId,
             target: nodeId
           }
-        ])
+        ]);
+        setSelectAction(null)
       }}  />}
       <div style={{ width: "100w", height: "100vh" }}>
         <ReactFlow

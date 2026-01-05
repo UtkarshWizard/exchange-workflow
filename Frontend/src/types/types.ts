@@ -1,8 +1,11 @@
 export type Node =
   | "price-trigger"
   | "timer"
+  | "email"
+  | "whatsapp"
+  | "report"
 
-export type NodeMetadata = PriceMetaData | TimerMetaData
+export type NodeMetadata = PriceMetaData | TimerMetaData | emailMetadata | numberMetadata;
 
 export interface NodeType {
   id: string;

@@ -1,9 +1,8 @@
-import type { NodeType, TimerMetaData } from "@/types/types";
+import type { TimerMetaData } from "@/types/types";
 import { Handle, Position } from "@xyflow/react";
 
 export default function TimerNode({data , isConnectable} : {
     data : {
-        type: NodeType,
         metaData: TimerMetaData
     } ,
     isConnectable: boolean

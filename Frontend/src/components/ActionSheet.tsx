@@ -68,7 +68,7 @@ export function ActionSheet({
             onValueChange={(value) => setSelectedAction(value)}
           >
             <SelectTrigger className="w-45">
-              <SelectValue placeholder="Select a Trigger" />
+              <SelectValue placeholder="Select an Action" />
             </SelectTrigger>
             <SelectContent>
               <SelectGroup>
@@ -85,10 +85,10 @@ export function ActionSheet({
         {selectedAction === "email" && (
           <div className="flex flex-col w-full p-4 gap-4">
             <Label>Enter the email</Label>
-            <Input placeholder="johndoe@gmail.com" onChange={(e) => { metaData => ({
+            <Input placeholder="johndoe@gmail.com" onChange={(e) => setMetaData(metaData => ({
               ...metaData,
               email: e.target.value
-            })}}></Input>
+            }))}></Input>
           </div>
         )}
         { selectedAction === "whatsapp" && (
