@@ -9,10 +9,10 @@ export type NodeMetadata = PriceMetaData | TimerMetaData | emailMetadata | numbe
 
 export interface NodeType {
   id: string;
-  type: Node; //is it a action or a trigger node ?
+  type: Node; // if trigger then timer or price ? if action toh ?
   position: { x: number; y: number };
   data: {
-    kind: "trigger" | "action", // if trigger then timer or price ? if action toh ?
+    kind: "trigger" | "action", //is it a action or a trigger node ?
     metaData: NodeMetadata,
     label: string
   };
